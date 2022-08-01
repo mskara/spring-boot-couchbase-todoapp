@@ -23,7 +23,6 @@ import java.util.function.Consumer;
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
-    private final UserDetailsService userDetailsService;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     @Override
