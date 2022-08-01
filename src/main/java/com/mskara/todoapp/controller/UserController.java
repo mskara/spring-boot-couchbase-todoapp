@@ -1,6 +1,5 @@
 package com.mskara.todoapp.controller;
 
-import com.mskara.todoapp.model.dto.AccessTokenResponseDto;
 import com.mskara.todoapp.model.dto.UserLoginRequestDto;
 import com.mskara.todoapp.model.entity.User;
 import com.mskara.todoapp.service.UserService;
@@ -21,12 +20,12 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<AccessTokenResponseDto> register(@Valid @RequestBody User user) {
+    public ResponseEntity<String> register(@Valid @RequestBody User user) {
         return new ResponseEntity<>(userService.register(user), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AccessTokenResponseDto> login(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
+    public ResponseEntity<String> login(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
         return ResponseEntity.ok(userService.login(userLoginRequestDto));
     }
 }

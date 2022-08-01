@@ -10,6 +10,6 @@ public interface UserRepository extends CouchbaseRepository<User, String> {
 
     Optional<User> findByUsername(String username);
 
-    boolean existsUserByUsername(@NotEmpty String username);
+    boolean existsByUsername(@NotEmpty String username);
 
 }

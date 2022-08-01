@@ -9,6 +9,7 @@ import com.mskara.todoapp.repository.UserRepository;
 import com.mskara.todoapp.service.TodoService;
 import com.mskara.todoapp.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,22 +21,24 @@ import java.util.Objects;
 public class TodoServiceImpl implements TodoService {
 
     private final UserRepository userRepository;
-    private final UserService userService;
 
     @Override
     public List<TodoItem> getTodoList() {
-        return userService.getCurrentUser().getTodoItemList();
+        return getCurrentUser().getTodoItemList();
     }
 
     @Override
     public TodoItem addTodoItem(TodoItem todoItem) {
-        final User user = userService.getCurrentUser();
+        final User user = getCurrentUser();
+        todoItem.setStatus(Status.TODO);
 
         if (Objects.isNull(user.getTodoItemList())) {
             final List<TodoItem> todoItemList = new ArrayList<>();
+            todoItem.setId(1);
             todoItemList.add(todoItem);
             user.setTodoItemList(todoItemList);
         } else {
+            todoItem.setId(user.getTodoItemList().size() + 1);
             user.getTodoItemList().add(todoItem);
         }
 
@@ -46,7 +49,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public TodoItem updateTodoItemStatus(Integer todoId, Status status) {
-        final User user = userService.getCurrentUser();
+        final User user = getCurrentUser();
         final List<TodoItem> todoItemList = user.getTodoItemList();
         final TodoItem todoItem = todoItemList
                 .stream()
@@ -59,5 +62,13 @@ public class TodoServiceImpl implements TodoService {
         return todoItem;
     }
 
+    private User getCurrentUser() {
+        String loggedInUsername = (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        return userRepository.findByUsername(loggedInUsername)
+                .orElseThrow(() -> new UserNotFoundException(loggedInUsername));
+    }
 
 }

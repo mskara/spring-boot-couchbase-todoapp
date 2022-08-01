@@ -3,7 +3,6 @@ package com.mskara.todoapp.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.mskara.todoapp.model.dto.AccessTokenResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,17 +23,15 @@ public class JwtTokenProvider implements TokenProvider {
     private String signingKey;
 
     @Override
-    public AccessTokenResponseDto generateToken(String username) {
+    public String generateToken(String username) {
 
         final long now = System.currentTimeMillis();
         final long expiryTime = now + tokenValidity;
-        final String jwtToken = JWT.create()
+        return JWT.create()
                 .withSubject(username)
                 .withIssuedAt(new Date(now))
                 .withExpiresAt(new Date(expiryTime))
                 .sign(Algorithm.HMAC256(signingKey.getBytes()));
-
-        return new AccessTokenResponseDto(jwtToken);
     }
 
     @Override

@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/todo")
+@RequestMapping("api/todo")
 @Slf4j
 @RequiredArgsConstructor
 public class TodoController {
