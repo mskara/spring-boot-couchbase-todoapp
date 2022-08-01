@@ -9,7 +9,10 @@ spring:
   data:
     couchbase:
       auto-index: true
-
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 jwt:
   tokenValidity: '3600000'
   signingKey: mskara
+
