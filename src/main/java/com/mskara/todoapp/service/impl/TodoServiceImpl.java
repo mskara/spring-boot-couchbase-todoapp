@@ -1,11 +1,13 @@
 package com.mskara.todoapp.service.impl;
 
-import com.mskara.todoapp.entity.TodoItem;
-import com.mskara.todoapp.entity.User;
+import com.mskara.todoapp.model.enums.Status;
+import com.mskara.todoapp.model.entity.TodoItem;
+import com.mskara.todoapp.model.entity.User;
 import com.mskara.todoapp.exception.ItemNotFoundException;
 import com.mskara.todoapp.exception.UserNotFoundException;
 import com.mskara.todoapp.repository.UserRepository;
 import com.mskara.todoapp.service.TodoService;
+import com.mskara.todoapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,18 +20,19 @@ import java.util.Objects;
 public class TodoServiceImpl implements TodoService {
 
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
-    public List<TodoItem> getTodoListByUser(String username) {
-        return getUserByUsername(username).getTodoItemList();
+    public List<TodoItem> getTodoList() {
+        return userService.getCurrentUser().getTodoItemList();
     }
 
     @Override
-    public TodoItem addTodoItemByUser(String username, TodoItem todoItem) {
-        final User user = getUserByUsername(username);
+    public TodoItem addTodoItem(TodoItem todoItem) {
+        final User user = userService.getCurrentUser();
 
         if (Objects.isNull(user.getTodoItemList())) {
-            List<TodoItem> todoItemList = new ArrayList<>();
+            final List<TodoItem> todoItemList = new ArrayList<>();
             todoItemList.add(todoItem);
             user.setTodoItemList(todoItemList);
         } else {
@@ -42,8 +45,8 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public TodoItem updateTodoItemStatus(String username, Integer todoId, boolean completed) {
-        final User user = getUserByUsername(username);
+    public TodoItem updateTodoItemStatus(Integer todoId, Status status) {
+        final User user = userService.getCurrentUser();
         final List<TodoItem> todoItemList = user.getTodoItemList();
         final TodoItem todoItem = todoItemList
                 .stream()
@@ -51,13 +54,10 @@ public class TodoServiceImpl implements TodoService {
                 .findAny()
                 .orElseThrow(() -> new ItemNotFoundException(todoId));
 
-        todoItem.setCompleted(completed);
+        todoItem.setStatus(status);
         userRepository.save(user);
         return todoItem;
     }
 
-    private User getUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(username));
-    }
+
 }

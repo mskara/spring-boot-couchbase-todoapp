@@ -1,6 +1,8 @@
 package com.mskara.todoapp.controller;
 
-import com.mskara.todoapp.entity.User;
+import com.mskara.todoapp.model.dto.AccessTokenResponseDto;
+import com.mskara.todoapp.model.dto.UserLoginRequestDto;
+import com.mskara.todoapp.model.entity.User;
 import com.mskara.todoapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,23 +11,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @Slf4j
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping
-    public ResponseEntity<List<User>> getUserList() {
-        return ResponseEntity.ok(userService.getUserList());
+    @PostMapping("/register")
+    public ResponseEntity<AccessTokenResponseDto> register(@Valid @RequestBody User user) {
+        return new ResponseEntity<>(userService.register(user), HttpStatus.CREATED);
     }
 
-    @PostMapping
-    public ResponseEntity<User> save(@Valid @RequestBody User user) {
-        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+    @PostMapping("/login")
+    public ResponseEntity<AccessTokenResponseDto> login(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
+        return ResponseEntity.ok(userService.login(userLoginRequestDto));
     }
 }

@@ -1,15 +1,15 @@
 package com.mskara.todoapp.service;
 
-import com.mskara.todoapp.entity.TodoItem;
+import com.mskara.todoapp.model.enums.Status;
+import com.mskara.todoapp.model.entity.TodoItem;
 
 import java.util.List;
 
 public interface TodoService {
 
-    List<TodoItem> getTodoListByUser(String username);
+    List<TodoItem> getTodoList();
 
-    TodoItem addTodoItemByUser(String username, TodoItem todoItem);
+    TodoItem addTodoItem(TodoItem todoItem);
 
-    TodoItem updateTodoItemStatus(String username, Integer todoId, boolean completed);
-
+    TodoItem updateTodoItemStatus(Integer todoId, Status status);
 }

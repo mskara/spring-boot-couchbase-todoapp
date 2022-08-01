@@ -1,13 +1,15 @@
 package com.mskara.todoapp.service;
 
-import com.mskara.todoapp.entity.User;
-
-import java.util.List;
+import com.mskara.todoapp.model.dto.AccessTokenResponseDto;
+import com.mskara.todoapp.model.dto.UserLoginRequestDto;
+import com.mskara.todoapp.model.entity.User;
 
 public interface UserService {
 
-    List<User> getUserList();
+    AccessTokenResponseDto register(User user);
 
-    User createUser(User user);
+    AccessTokenResponseDto login(UserLoginRequestDto userLoginRequestDto);
+
+    User getCurrentUser();
 
 }

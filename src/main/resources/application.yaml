@@ -9,3 +9,7 @@ spring:
   data:
     couchbase:
       auto-index: true
+
+jwt:
+  tokenValidity: '3600000'
+  signingKey: mskara

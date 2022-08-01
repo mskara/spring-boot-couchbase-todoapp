@@ -1,6 +1,7 @@
-package com.mskara.todoapp.entity;
+package com.mskara.todoapp.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mskara.todoapp.model.enums.Status;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
@@ -12,7 +13,7 @@ public class TodoItem {
     private Integer id;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private boolean completed;
+    private Status status;
 
     @NotEmpty
     private String description;
