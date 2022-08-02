@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  app:
+    build: ./todo-app
+    restart: on-failure
+    ports:
+      - "8080:1905"
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "config.couchbase.host" : "127.0.0.1",
+        "config.couchbase.username" : "mskara",
+        "config.couchbase.password" : "123456",
+        "config.couchbase.bucketName" : "todoapp"
+      }'
+    volumes:
+      - .m2:/root/.m2
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:
