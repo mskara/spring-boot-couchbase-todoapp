@@ -3,6 +3,16 @@
 ## About The Project
 A simple to-do application that users can create their own lists.
 
+### Technology Stack
+* Java 8
+* Spring Boot
+* Spring Data Couchbase
+* Couchbase
+* Swagger
+* Maven
+* Docker
+* JUnit and Mockito
+
 ## Getting Started
 Follow the instructions to set up the project in your local environment.
 
