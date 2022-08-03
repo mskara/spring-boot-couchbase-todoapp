@@ -55,3 +55,11 @@ http://localhost:1905/swagger-ui.html#/
 
 ### Couchbase Interface
 http://localhost:8091/ui/index.html
+
+### How it works
+* after running the app, you can register from swagger interface or postman
+* after registiration take the jwt token
+* what can you do with this app
+    - display todo list of user who has token
+    - add new item to todo list
+    - update status of todo item with item id
