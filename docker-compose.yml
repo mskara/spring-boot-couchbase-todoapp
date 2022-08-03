@@ -1,11 +1,41 @@
 version: "3.8"
 
 services:
+  couchbase-server:
+    build: ./couchbase-server
+    image: mskara/couchbase
+    ports:
+      - 8091-8096:8091-8096
+      - 11210:11210
+    environment:
+      - CLUSTER_NAME=couchbase-demo
+      - COUCHBASE_ADMINISTRATOR_USERNAME=mskara
+      - COUCHBASE_ADMINISTRATOR_PASSWORD=123456
+      - COUCHBASE_BUCKET=todoapp
+      - COUCHBASE_BUCKET_RAMSIZE=512
+      - COUCHBASE_RBAC_USERNAME=admin
+      - COUCHBASE_RBAC_PASSWORD=P@$$w0rd
+      - COUCHBASE_RBAC_NAME=admin
+      - COUCHBASE_RAM_SIZE=2048
+      - COUCHBASE_INDEX_RAM_SIZE=512
+    hostname: couchbase-server
+    container_name: couchbase-server
+    working_dir: /opt/couchbase
+    stdin_open: true
+    tty: true
+    networks:
+      - workshop
+    entrypoint: [ "" ]
+    command: sh -c "/opt/couchbase/init/init-cbserver.sh"
+
   app:
     build: ./todo-app
+    image: mskara/todoapp
     restart: on-failure
+    depends_on:
+      - couchbase-server
     ports:
-      - "8080:1905"
+      - "1905:8080"
     environment:
       SPRING_APPLICATION_JSON: '{
         "config.couchbase.host" : "127.0.0.1",
@@ -17,6 +47,8 @@ services:
       - .m2:/root/.m2
     stdin_open: true
     tty: true
+    networks:
+      - workshop
 
-volumes:
-  db:
+networks:
+  workshop:
