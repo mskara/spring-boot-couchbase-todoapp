@@ -35,12 +35,20 @@ docker-compose down
 
 You can run both of todo application and couchbase service in your local environment. Please run the below commands.
 
+
 ```bash
-docker run -d --name couchbase -p 8091-8093:8091-8093 -p 11210:11210 mskara/couchbase
+docker run -d --name couchbase -p 8091-8093:8091-8093 -p 11210:11210 -e CLUSTER_NAME=couchbase-demo -e COUCHBASE_ADMINISTRATOR_USERNAME=mskara -e COUCHBASE_ADMINISTRATOR_PASSWORD=123456 -e COUCHBASE_BUCKET=todoapp -e COUCHBASE_BUCKET_RAMSIZE=512 -e COUCHBASE_RAM_SIZE=2048 -e COUCHBASE_INDEX_RAM_SIZE=512 mskara/couchbase
 ```
+
 ```bash
-docker run -p 1905:8080 --link couchbase mskara/todoapp
+docker exec couchbase /opt/couchbase/init/init-cbserver.sh
 ```
+
+```bash
+docker run --name todoapp -p 1905:8080 -e CONFIG_COUCHBASE_HOST=couchbase -e CONFIG_COUCHBASE_USERNAME=mskara -e CONFIG_COUCHBASE_PASSWORD=123456 -e CONFIG_COUCHBASE_BUCKETNAME=todoapp --link couchbase mskara/todoapp
+```
+
+
 
 ### Swagger
 http://localhost:1905/swagger-ui.html#/

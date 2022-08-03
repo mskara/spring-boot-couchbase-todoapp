@@ -38,7 +38,7 @@ services:
       - "1905:8080"
     environment:
       SPRING_APPLICATION_JSON: '{
-        "config.couchbase.host" : "127.0.0.1",
+        "config.couchbase.host" : "couchbase-server",
         "config.couchbase.username" : "mskara",
         "config.couchbase.password" : "123456",
         "config.couchbase.bucketName" : "todoapp"
